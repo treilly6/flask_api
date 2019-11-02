@@ -1,0 +1,9 @@
+.form_label {
+  display: inline-block;
+  text-align: left !important;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: center;
+}
