@@ -13,9 +13,10 @@ $(document).ready(function() {
           },
           type : "POST",
           url : '/api/employee_records',
-      })
-      .done(function(data) {
+      }).done(function(data) {
           console.log(data);
+          var form = $("#postForm");
+          messageBoxHandler(data, form);
       });
     });
 
@@ -24,14 +25,31 @@ $(document).ready(function() {
       console.log("ISSA DEELET");
 
       // endpoint handler, name or id
+      var id = $("#del_id").val().trim();
+      var full_name = $("#del_name").val().trim();
+      full_name.replace(" ","_")
+
+      if (id == '' && full_name == '') {
+          // add the error class to the input boxes
+          console.log("EMPTY INPUTS ERROR");
+          return
+      } else if (id != '') {
+          var endpoint = id;
+      } else if (full_name != '') {
+          var endpoint = full_name;
+      }
 
       $.ajax({
           data : {
-            id : $("#del_id").val().trim(),
-            full_name : $("#del_name").val().trim(),
+            id : id,
+            full_name : full_name,
           },
           type : "DELETE",
-          url : '/api/employee_records/',
+          url : '/api/employee_records/' + endpoint,
+      }).done(function(data) {
+          console.log(data);
+          var form = $("#deleteForm");
+          messageBoxHandler(data, form);
       });
     });
 
@@ -55,15 +73,53 @@ $(document).ready(function() {
         event.preventDefault();
         console.log("PUTTTT FORM");
 
+        // Add the validation for these inputs
+        var id = $("#put_id").val().trim();
+        var first_name = $("#put_fname").val().trim();
+        var last_name = $("#put_lname").val().trim();
+        var address = $("#put_address").val().trim();
+        var salary = $("#put_salary").val().trim();
+        var date_hired = $("#put_dhired").val().trim();
+
         $.ajax({
             data : {
-                poop : "yes",
+              id : id,
+              first_name : first_name,
+              last_name : last_name,
+              address : address,
+              salary : salary,
+              date_hired : date_hired,
             },
             type : "PUT",
-            url : '/api/employee_records/55',
+            url : '/api/employee_records/' + id,
+        }).done(function(data) {
+            console.log(data);
+            var form = $("#putForm");
+            messageBoxHandler(data, form);
         });
     })
 
+    function messageBoxHandler(data, form) {
+      console.log("WILL THSI WORK?");
+      if (data.error) {
+        console.log("IN THE ERROR");
+        form.find(".messageBox").css("display","block");
+        form.find(".messageBox").removeClass("successBox");
+        form.find(".messageBox").addClass("errorBox");
+        form.find(".result").html("Error");
+        form.find(".message").html(data.error);
+      } else if (data.success) {
+        console.log("IN THE SUCCESS");
+        form.find(".messageBox").css("display","block");
+        form.find(".messageBox").removeClass("errorBox");
+        form.find(".messageBox").addClass("successBox");
+        form.find(".result").html("Success");
+        form.find(".message").html(data.success);
+      }
+      setTimeout(function() {
+        form.find(".messageBox").css("display","none");
+      }, 5000);
+    }
 });
 
 function expandForm(div) {

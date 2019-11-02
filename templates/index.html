@@ -20,6 +20,9 @@
       <div class="bg-light my-4">
         <div class="h4 text-center py-3" onclick="expandForm(this)">Get Employee Data</div>
         <form id="getForm" class="w-50 mx-auto form-div" style="display:none;">
+          <div class="messageBox" style="display:none;">
+              <div class=""><span class="result"></span> : <span class="message"></span></div>
+          </div>
           <p class="text-center">* Input employee ID <strong>OR</strong> employee name *</p>
           <div class="form-group">
             <label class="form_label" for="employee_id">Employee ID</label>
@@ -38,30 +41,33 @@
       <div class="bg-light my-4">
         <div class="h4 text-center py-3" onclick="expandForm(this)">Update Employee Info</div>
         <form id="putForm" class="w-50 mx-auto form-div" style="display:none;">
+          <div class="messageBox" style="display:none;">
+              <div class=""><span class="result"></span> : <span class="message"></span></div>
+          </div>
           <p class="text-center">* <strong>Must input employee ID.</strong> All other inputs are optional. Only inputs with values will be updated *</p>
           <div class="form-group">
             <label class="form_label" for="employee_id">Employee ID</label>
-            <input class="form-control" type="text" name="employee_id" value="">
+            <input id="put_id" class="form-control" type="text" name="employee_id" value="">
           </div>
           <div class="form-group">
-            <label class="form_label" for="employee_id">First Name</label>
-            <input class="form-control" type="text" name="first_name" value="">
+            <label class="form_label" for="first_name">First Name</label>
+            <input id="put_fname" class="form-control" type="text" name="first_name" value="">
           </div>
           <div class="form-group">
-            <label class="form_label" for="employee_name">Last Name</label>
-            <input class="form-control" type="text" name="last_name" value="">
+            <label class="form_label" for="last_name">Last Name</label>
+            <input id="put_lname" class="form-control" type="text" name="last_name" value="">
           </div>
           <div class="form-group">
-            <label class="form_label" for="employee_name">Address</label>
-            <input class="form-control" type="text" name="address" value="">
+            <label class="form_label" for="address">Address</label>
+            <input id="put_address" class="form-control" type="text" name="address" value="">
           </div>
           <div class="form-group">
-            <label class="form_label" for="employee_name">Salary</label>
-            <input class="form-control" type="text" name="salary" value="">
+            <label class="form_label" for="salary">Salary</label>
+            <input id="put_salary" class="form-control" type="text" name="salary" value="">
           </div>
           <div class="form-group">
-            <label class="form_label" for="employee_name">Date Hired</label>
-            <input class="form-control" type="text" name="date_hired" value="">
+            <label class="form_label" for=date_hired">Date Hired</label>
+            <input id="put_dhired" class="form-control" type="text" name="date_hired" value="">
           </div>
           <div class="btn-wrapper pb-3">
             <button class="btn btn-info" type="submit" name="button">Update Data</button>
@@ -72,6 +78,9 @@
       <div class="bg-light my-4">
         <div class="h4 text-center py-3" onclick="expandForm(this)">Create New Employee Record</div>
         <form id="postForm" class="w-50 mx-auto form-div" style="display:none;">
+          <div class="messageBox" style="display:none;">
+              <div class=""><span class="result"></span> : <span class="message"></span></div>
+          </div>
           <p class="text-center">*<strong>All input fields are required</strong>*</p>
           <div class="form-group">
             <label class="form_label" for="employee_id">First Name</label>
@@ -102,14 +111,17 @@
       <div class="bg-light my-4">
         <div class="h4 text-center py-3" onclick="expandForm(this)">Delete Employee Data</div>
         <form id="deleteForm" class="w-50 mx-auto form-div" style="display:none;">
+          <div class="messageBox" style="display:none;">
+              <div class=""><span class="result"></span> : <span class="message"></span></div>
+          </div>
           <p class="text-center">* Input employee ID <strong>OR</strong> employee name *</p>
           <div class="form-group">
-            <label id="del_id" class="form_label" for="employee_id">Employee ID</label>
-            <input class="form-control" type="text" name="employee_id" value="">
+            <label class="form_label" for="employee_id">Employee ID</label>
+            <input id="del_id" class="form-control" type="text" name="employee_id" value="">
           </div>
           <div class="form-group">
-            <label id="del_name" class="form_label" for="employee_name">Employee Name</label>
-            <input class="form-control" type="text" name="employee_name" value="">
+            <label class="form_label" for="employee_name">Employee Name</label>
+            <input id="del_name" class="form-control" type="text" name="employee_name" value="">
           </div>
           <div class="btn-wrapper pb-3">
             <button class="btn btn-info" type="submit">Delete Data</button>

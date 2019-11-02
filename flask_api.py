@@ -58,10 +58,13 @@ class Employee_Record(Resource):
     def post(self):
         print("ISSA POST")
         print(request.form)
+
+        # add validations to this data
         first_name = request.form['first_name'].capitalize()
         last_name = request.form['last_name'].capitalize()
         salary = int(request.form['salary'].replace(',',''))
         address = request.form['address']
+
         date_hired = request.form['date_hired']
         date_split = date_hired.split("/")
         date_hired = datetime.date(int(date_split[2]), int(date_split[0]), int(date_split[1]))
@@ -72,7 +75,7 @@ class Employee_Record(Resource):
 
         print(first_name, last_name, salary, address, date_hired)
 
-        print("OVER")
+        return jsonify({"success" : "Successfully created record"})
 
 class Employee_Record_ID(Resource):
     def get(self, id):
@@ -88,35 +91,88 @@ class Employee_Record_ID(Resource):
                 "Date_Hired" : str(emp.date_hired),
             }
             response.append(emp_dict)
-        return {"data":response}
+        return jsonify({"data":response})
 
     def delete(self, id):
         print("ISSA DELETE on the ID")
+        print("HERE TH ID ", id)
+        record = Employee.query.filter(Employee.id == id).first()
+        if record == None:
+            print("ITS A NONE RECORD")
+            return jsonify({"error" : "ID did not match any record"})
+        else:
+            print("WE CHILLEN")
+            db.session.delete(record)
+            db.session.commit()
+            return jsonify({"success":"Successfully Deleted Record"})
+
 
     def put(self, id):
         print("ISSSAAAA PUT REQ MAN")
+        record = Employee.query.filter(Employee.id == id).first()
+        if record == None:
+            print("NO RECORD FOUND")
+            return jsonify({"error" : "ID did not match any record"})
+        else:
+            print(request.form)
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            address = request.form['address']
+            salary = request.form['salary']
+            date_hired = request.form['date_hired']
+            print("HERE SOME UPDATE SHIT")
 
+            if first_name != '':
+                record.first_name = first_name
+            if last_name != '':
+                record.last_name = last_name
+            if address != '':
+                record.address = address
+            if salary != '':
+                record.salary = salary
+            if date_hired != '':
+                record.date_hired = date_hired
+
+            db.session.commit()
+            return jsonify({"success" : "Record Successfully Updated"})
 
 class Employee_Record_Name(Resource):
     def get(self, name):
         print("Issa GET MAN NAME")
-        first_name = name.split("_")[0]
-        last_name = name.split("_")[1]
-        query = Employee.query.filter(Employee.first_name == first_name, Employee.last_name == last_name)
+        split_name = name.split("_")
+
+        if len(split_name) < 2:
+            return jsonify({"error":"No Record Matching Name"})
+
+        first_name = split_name[0]
+        last_name = split_name[1]
+        record = Employee.query.filter(Employee.first_name == first_name, Employee.last_name == last_name).first()
+
+        if not record:
+            print("NO RECORD")
+            return jsonify({"error" : "No Record Matching Name 2"})
+
         response = []
-        for emp in query:
-            emp_dict = {
-                "id" : emp.id,
-                "Name" : str(emp),
-                "Address" : emp.address,
-                "Salary": emp.salary,
-                "Date_Hired" : str(emp.date_hired),
-            }
-            response.append(emp_dict)
+        employee_dict = {
+            "id" : record.id,
+            "Name" : str(record),
+            "Address" : record.address,
+            "Salary": record.salary,
+            "Date_Hired" : str(record.date_hired),
+        }
+        response.append(employee_dict)
         return {"data":response}
 
     def delete(self, name):
         print("ISSA DELETE on the Name")
+        split_name = name.split("_")
+
+        if len(split_name) < 2:
+            return jsonify({"error":"No Record Matching Name"})
+
+        first_name = split_name[0]
+        last_name = split_name[1]
+        query = Employee.query.filter(Employee.first_name == first_name, Employee.last_name == last_name).first()
 
 
 class Salaries(Resource):
@@ -124,12 +180,6 @@ class Salaries(Resource):
         query = Employee.query.with_entities(Employee.salary).all()
         response = [salary for salary, in query]
         return {"salaries" : response}
-
-class Delete_Employee_Record(Resource):
-    def post(self, id = None, name = None):
-        query = Employee.query.filter(Employee.id == id).first
-        return
-
 
 
 @app.route('/')
