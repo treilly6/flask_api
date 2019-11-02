@@ -17,15 +17,60 @@ $(document).ready(function() {
       .done(function(data) {
           console.log(data);
       });
-
-
-
     });
+
+    $("#deleteForm").on("submit", function(event) {
+      event.preventDefault();
+      console.log("ISSA DEELET");
+
+      // endpoint handler, name or id
+
+      $.ajax({
+          data : {
+            id : $("#del_id").val().trim(),
+            full_name : $("#del_name").val().trim(),
+          },
+          type : "DELETE",
+          url : '/api/employee_records/',
+      });
+    });
+
+    $("#getForm").on("submit", function(event) {
+        event.preventDefault();
+
+        var id = $("#get_id").val().trim();
+        var name = $("#get_name").val().trim();
+
+        if (id == '' && name == '') {
+            console.log("WE HAVE THE RETURN A ERROR");
+        } else if (id != '') {
+            window.location.href = '/api/employee_records/' + id;
+        } else if (name != '') {
+            name = name.replace(" ","_");
+            window.location.href = '/api/employee_records/' + name;
+        }
+    });
+
+    $("#putForm").on("submit", function(event) {
+        event.preventDefault();
+        console.log("PUTTTT FORM");
+
+        $.ajax({
+            data : {
+                poop : "yes",
+            },
+            type : "PUT",
+            url : '/api/employee_records/55',
+        });
+    })
 
 });
 
-function expandForm() {
+function expandForm(div) {
     console.log("ISSA FUCKIN LOIOOOOOOOOOT");
+    var form = div.nextElementSibling;
+    form.style.display == "none" ? form.style.display = "block" : form.style.display = "none";
+    console.log(form);
 }
 
 function getInputHandler(btn) {
@@ -87,4 +132,8 @@ function postInputHandler(btn) {
   }
 
   console.log(json_data);
+}
+
+function allEmployeeData() {
+    window.location.href = '/api/employee_records';
 }

@@ -11,28 +11,34 @@
   <body>
     <h2 class="text-center">Employees API</h2>
     <div class="w-100">
-      <p class="text-center">API for basic CRUD operations on employee data</p>
+      <p class="text-center">API for basic CRUD operations on employee data. HERE are the API endpoints. Or you can use the forms below to interact with the API</p>
 
-      <div class="bg-light my-4" onclick="expandForm()">
-        <div class="h4 text-center">Get Employee Data</div>
-        <div class="w-50 mx-auto form-div">
+      <div class="btn-wrapper">
+        <button class="btn btn-info" type="button" name="button" onclick="allEmployeeData();">Get All Employee Data</button>
+      </div>
+
+      <div class="bg-light my-4">
+        <div class="h4 text-center py-3" onclick="expandForm(this)">Get Employee Data</div>
+        <form id="getForm" class="w-50 mx-auto form-div" style="display:none;">
+          <p class="text-center">* Input employee ID <strong>OR</strong> employee name *</p>
           <div class="form-group">
             <label class="form_label" for="employee_id">Employee ID</label>
-            <input class="form-control" type="text" name="employee_id" value="">
+            <input id="get_id" class="form-control" type="text" name="employee_id" value="">
           </div>
           <div class="form-group">
             <label class="form_label" for="employee_name">Employee Name</label>
-            <input class="form-control" type="text" name="employee_name" value="">
+            <input id="get_name" class="form-control" type="text" name="employee_name" value="">
           </div>
-          <div class="btn-wrapper">
-            <button class="btn btn-info" onclick="getInputHandler(this)">Get Data</button>
+          <div class="btn-wrapper pb-3">
+            <button class="btn btn-info" type="submit">Get Data</button>
           </div>
-        </div>
+        </form>
       </div>
 
-      <div class="bg-light my-4" onclick="expandForm()">
-        <div class="h4 text-center">Update Employee Info</div>
-        <form class="w-50 mx-auto" action="index.html" method="put">
+      <div class="bg-light my-4">
+        <div class="h4 text-center py-3" onclick="expandForm(this)">Update Employee Info</div>
+        <form id="putForm" class="w-50 mx-auto form-div" style="display:none;">
+          <p class="text-center">* <strong>Must input employee ID.</strong> All other inputs are optional. Only inputs with values will be updated *</p>
           <div class="form-group">
             <label class="form_label" for="employee_id">Employee ID</label>
             <input class="form-control" type="text" name="employee_id" value="">
@@ -57,15 +63,16 @@
             <label class="form_label" for="employee_name">Date Hired</label>
             <input class="form-control" type="text" name="date_hired" value="">
           </div>
-          <div class="btn-wrapper">
-            <button class="btn btn-info" type="submit" name="button">Get Data</button>
+          <div class="btn-wrapper pb-3">
+            <button class="btn btn-info" type="submit" name="button">Update Data</button>
           </div>
         </form>
       </div>
 
-      <div class="bg-light my-4" onclick="expandForm()">
-        <div class="h4 text-center">Create New Employee Record</div>
-        <form id="postForm" class="w-50 mx-auto form-div">
+      <div class="bg-light my-4">
+        <div class="h4 text-center py-3" onclick="expandForm(this)">Create New Employee Record</div>
+        <form id="postForm" class="w-50 mx-auto form-div" style="display:none;">
+          <p class="text-center">*<strong>All input fields are required</strong>*</p>
           <div class="form-group">
             <label class="form_label" for="employee_id">First Name</label>
             <input class="form-control" type="text" name="first_name" id="post_fname" value="">
@@ -86,8 +93,26 @@
             <label class="form_label" for="employee_name">Date Hired</label>
             <input class="form-control" type="text" name="date_hired" id="post_dhired" value="">
           </div>
-          <div class="btn-wrapper">
+          <div class="btn-wrapper pb-3">
             <button class="btn btn-info" type="submit">Post Data</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="bg-light my-4">
+        <div class="h4 text-center py-3" onclick="expandForm(this)">Delete Employee Data</div>
+        <form id="deleteForm" class="w-50 mx-auto form-div" style="display:none;">
+          <p class="text-center">* Input employee ID <strong>OR</strong> employee name *</p>
+          <div class="form-group">
+            <label id="del_id" class="form_label" for="employee_id">Employee ID</label>
+            <input class="form-control" type="text" name="employee_id" value="">
+          </div>
+          <div class="form-group">
+            <label id="del_name" class="form_label" for="employee_name">Employee Name</label>
+            <input class="form-control" type="text" name="employee_name" value="">
+          </div>
+          <div class="btn-wrapper pb-3">
+            <button class="btn btn-info" type="submit">Delete Data</button>
           </div>
         </form>
       </div>

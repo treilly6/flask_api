@@ -76,6 +76,7 @@ class Employee_Record(Resource):
 
 class Employee_Record_ID(Resource):
     def get(self, id):
+        print("ISA GET MAN ID")
         query = Employee.query.filter(Employee.id == id)
         response = []
         for emp in query:
@@ -89,8 +90,16 @@ class Employee_Record_ID(Resource):
             response.append(emp_dict)
         return {"data":response}
 
+    def delete(self, id):
+        print("ISSA DELETE on the ID")
+
+    def put(self, id):
+        print("ISSSAAAA PUT REQ MAN")
+
+
 class Employee_Record_Name(Resource):
     def get(self, name):
+        print("Issa GET MAN NAME")
         first_name = name.split("_")[0]
         last_name = name.split("_")[1]
         query = Employee.query.filter(Employee.first_name == first_name, Employee.last_name == last_name)
@@ -106,11 +115,21 @@ class Employee_Record_Name(Resource):
             response.append(emp_dict)
         return {"data":response}
 
+    def delete(self, name):
+        print("ISSA DELETE on the Name")
+
+
 class Salaries(Resource):
     def get(self):
         query = Employee.query.with_entities(Employee.salary).all()
         response = [salary for salary, in query]
         return {"salaries" : response}
+
+class Delete_Employee_Record(Resource):
+    def post(self, id = None, name = None):
+        query = Employee.query.filter(Employee.id == id).first
+        return
+
 
 
 @app.route('/')
