@@ -3,6 +3,11 @@ $(document).ready(function() {
     $("#postForm").on("submit", function(event) {
       event.preventDefault();
       console.log("WHAT");
+      valid = checkFormInputs($("#postForm"));
+      if (valid == false) {
+          console.log("NAHHH");
+          return;
+      }
       $.ajax({
           data : {
             first_name : $("#post_fname").val().trim(),
@@ -23,7 +28,11 @@ $(document).ready(function() {
     $("#deleteForm").on("submit", function(event) {
       event.preventDefault();
       console.log("ISSA DEELET");
-
+      valid = checkFormInputs($("#deleteForm"));
+      if (valid == false) {
+          console.log("NAHHH");
+          return;
+      }
       // endpoint handler, name or id
       var id = $("#del_id").val().trim();
       var full_name = $("#del_name").val().trim();
@@ -56,6 +65,12 @@ $(document).ready(function() {
     $("#getForm").on("submit", function(event) {
         event.preventDefault();
 
+        valid = checkFormInputs($("#getForm"));
+        if (valid == false) {
+            console.log("NAHHH");
+            return;
+        }
+
         var id = $("#get_id").val().trim();
         var name = $("#get_name").val().trim();
 
@@ -72,6 +87,12 @@ $(document).ready(function() {
     $("#putForm").on("submit", function(event) {
         event.preventDefault();
         console.log("PUTTTT FORM");
+
+        valid = checkFormInputs($("#putForm"));
+        if (valid == false) {
+            console.log("NAHHH");
+            return;
+        }
 
         // Add the validation for these inputs
         var id = $("#put_id").val().trim();
@@ -100,26 +121,91 @@ $(document).ready(function() {
     })
 
     function messageBoxHandler(data, form) {
-      console.log("WILL THSI WORK?");
       if (data.error) {
-        console.log("IN THE ERROR");
-        form.find(".messageBox").css("display","block");
         form.find(".messageBox").removeClass("successBox");
         form.find(".messageBox").addClass("errorBox");
         form.find(".result").html("Error");
         form.find(".message").html(data.error);
       } else if (data.success) {
-        console.log("IN THE SUCCESS");
-        form.find(".messageBox").css("display","block");
         form.find(".messageBox").removeClass("errorBox");
         form.find(".messageBox").addClass("successBox");
         form.find(".result").html("Success");
         form.find(".message").html(data.success);
       }
-      setTimeout(function() {
-        form.find(".messageBox").css("display","none");
-      }, 5000);
+      form.find(".messageBox").show();
+      form.find(".messageBox").delay(5000).fadeOut();
     }
+
+
+    function checkFormInputs(formType) {
+        console.log("CHECKING INPPUTS");
+        console.log(formType.attr('id'));
+        var formID = formType.attr('id');
+        var formInputs = formType.find("input");
+        console.log(typeof(formInputs));
+
+        // good
+        if (formID == "getForm" || formID == "deleteForm") {
+            console.log("NEED AT LEAST ONE INPUT");
+            var valid = false;
+            var inputArray = [];
+            for (let input of formInputs) {
+                console.log(input);
+                inputArray.push(input);
+                if (input.value.trim() != '') {
+                    valid = true;
+                }
+            }
+            if (!valid) {
+                console.log("MISSING BOTH");
+                inputArray.forEach(function(input){
+                    input.classList.add("errorBox");
+                });
+                var data = {"error":"One Input is required"};
+                messageBoxHandler(data, formType);
+                console.log("INVALID");
+            }
+
+        // good
+        } else if (formID == "putForm") {
+            console.log("NEED EMPLOYEE ID and all others optional");
+            var valid = false;
+            var putID = formType.find("#put_id");
+            if (putID.val().trim() == '') {
+                console.log("INVALid");
+                putID.addClass("errorBox");
+                console.log("SEND ERROR MESSAHEEE");
+                var data = {"error":"Employee ID is required"};
+                messageBoxHandler(data, formType);
+            } else {
+                valid = true;
+            }
+
+        // good
+        } else if (formID == "postForm") {
+            console.log("NEED ALL THE INPUTS");
+            var valid = true;
+            console.log(formInputs);
+            for (let input of formInputs) {
+                console.log(input);
+                if (input.value.trim() == '') {
+                    input.classList.add("errorBox");
+                    valid = false;
+                } else {
+                    input.classList.remove("errorBox");
+                }
+            }
+            if (!valid) {
+              var data = {"error":"All Inputs are Required"};
+              messageBoxHandler(data, formType);
+            }
+        }
+        return valid;
+    }
+
+
+
+
 });
 
 function expandForm(div) {
@@ -128,6 +214,26 @@ function expandForm(div) {
     form.style.display == "none" ? form.style.display = "block" : form.style.display = "none";
     console.log(form);
 }
+
+function allEmployeeData() {
+    window.location.href = '/api/employee_records';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function getInputHandler(btn) {
     console.log("HEY MANE");
@@ -188,8 +294,4 @@ function postInputHandler(btn) {
   }
 
   console.log(json_data);
-}
-
-function allEmployeeData() {
-    window.location.href = '/api/employee_records';
 }
