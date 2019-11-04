@@ -41,7 +41,6 @@ class Employee_Names(Resource):
 
 class Employee_Record(Resource):
     def get(self):
-        print("IN THE GET")
         query = Employee.query.all()
         response = []
         for emp in query:
@@ -56,11 +55,7 @@ class Employee_Record(Resource):
         return {"data":response}
 
     def post(self):
-        print("ISSA POST")
-
         body = request.json
-
-        print(request.json, "\n", "\n")
 
         # add validations to this data
         first_name = body['first_name'].capitalize()
@@ -76,13 +71,10 @@ class Employee_Record(Resource):
         db.session.add(new_employee)
         db.session.commit()
 
-        print(first_name, last_name, salary, address, date_hired)
-
         return jsonify({"success" : "Successfully created record"})
 
 class Employee_Record_ID(Resource):
     def get(self, id):
-        print("ISA GET MAN ID")
         query = Employee.query.filter(Employee.id == id)
         response = []
         for emp in query:
@@ -97,27 +89,20 @@ class Employee_Record_ID(Resource):
         return jsonify({"data":response})
 
     def delete(self, id):
-        print("ISSA DELETE on the ID")
-        print("HERE TH ID ", id)
         record = Employee.query.filter(Employee.id == id).first()
         if record == None:
-            print("ITS A NONE RECORD")
             return jsonify({"error" : "ID did not match any record"})
         else:
-            print("WE CHILLEN")
             db.session.delete(record)
             db.session.commit()
             return jsonify({"success":"Successfully Deleted Record"})
 
 
     def put(self, id):
-        print("ISSSAAAA PUT REQ MAN")
         record = Employee.query.filter(Employee.id == id).first()
         if record == None:
-            print("NO RECORD FOUND")
             return jsonify({"error" : "ID did not match any record"})
         else:
-
             try:
                 body = request.json
                 first_name = body['first_name']
@@ -144,7 +129,6 @@ class Employee_Record_ID(Resource):
 
 class Employee_Record_Name(Resource):
     def get(self, name):
-        print("Issa GET MAN NAME")
         split_name = name.split("_")
 
         if len(split_name) < 2:
@@ -155,7 +139,6 @@ class Employee_Record_Name(Resource):
         record = Employee.query.filter(Employee.first_name == first_name, Employee.last_name == last_name).first()
 
         if not record:
-            print("NO RECORD")
             return jsonify({"error" : "No Record Matching Name 2"})
 
         response = []
@@ -170,7 +153,6 @@ class Employee_Record_Name(Resource):
         return {"data":response}
 
     def delete(self, name):
-        print("ISSA DELETE on the Name")
         split_name = name.split("_")
 
         if len(split_name) < 2:
@@ -181,10 +163,8 @@ class Employee_Record_Name(Resource):
         record = Employee.query.filter(Employee.first_name == first_name, Employee.last_name == last_name).first()
 
         if record == None:
-            print("ITS A NONE RECORD")
             return jsonify({"error" : "Name did not match any record"})
         else:
-            print("WE CHILLEN")
             db.session.delete(record)
             db.session.commit()
             return jsonify({"success":"Successfully Deleted Record"})
@@ -206,7 +186,6 @@ class Addresses(Resource):
 
 @app.route('/')
 def index():
-    # add a template with some of the api documentation
     return render_template('index.html')
 
 
