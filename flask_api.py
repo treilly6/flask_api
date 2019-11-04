@@ -57,15 +57,18 @@ class Employee_Record(Resource):
 
     def post(self):
         print("ISSA POST")
-        print(request.form)
+
+        body = request.json
+
+        print(request.json, "\n", "\n")
 
         # add validations to this data
-        first_name = request.form['first_name'].capitalize()
-        last_name = request.form['last_name'].capitalize()
-        salary = int(request.form['salary'].replace(',',''))
-        address = request.form['address']
+        first_name = body['first_name'].capitalize()
+        last_name = body['last_name'].capitalize()
+        salary = int(body['salary'].replace(',',''))
+        address = body['address']
 
-        date_hired = request.form['date_hired']
+        date_hired = body['date_hired']
         date_split = date_hired.split("/")
         date_hired = datetime.date(int(date_split[2]), int(date_split[0]), int(date_split[1]))
 
@@ -114,13 +117,16 @@ class Employee_Record_ID(Resource):
             print("NO RECORD FOUND")
             return jsonify({"error" : "ID did not match any record"})
         else:
-            print(request.form)
-            first_name = request.form['first_name']
-            last_name = request.form['last_name']
-            address = request.form['address']
-            salary = request.form['salary']
-            date_hired = request.form['date_hired']
-            print("HERE SOME UPDATE SHIT")
+
+            try:
+                body = request.json
+                first_name = body['first_name']
+                last_name = body['last_name']
+                address = body['address']
+                salary = body['salary']
+                date_hired = body['date_hired']
+            except:
+                return jsonify({"error" : "Missing Inputs"})
 
             if first_name != '':
                 record.first_name = first_name
