@@ -219,11 +219,40 @@ $(document).ready(function() {
 
 function expandForm(div) {
     console.log("ISSA FUCKIN LOIOOOOOOOOOT");
+    var arrow = div.querySelector("i");
     var form = div.nextElementSibling;
-    form.style.display == "none" ? form.style.display = "block" : form.style.display = "none";
+    if (form.style.display == "none") {
+      form.style.display = "block";
+      arrow.style.transform = "rotate(90deg)";
+    } else {
+      form.style.display = "none";
+      arrow.style.transform = "rotate(0deg)";
+    }
     console.log(form);
 }
 
 function allEmployeeData() {
     window.location.href = '/api/employee_records';
+}
+
+function employeeSalaries() {
+    window.location.href = '/api/salaries';
+}
+
+function employeeAddresses() {
+    window.location.href = '/api/addresses';
+}
+
+function toggleReqCont(div) {
+    var cont = $("#mainReqCont");
+    var arrow = div.querySelector("i");
+    console.log(arrow);
+    console.log("YEETeef");
+    if (cont.css("display") == "none") {
+      cont.css("display","block");
+      arrow.style.transform = "rotate(90deg)";
+    } else {
+      cont.css("display","none");
+      arrow.style.transform = "rotate(0deg)"
+    }
 }

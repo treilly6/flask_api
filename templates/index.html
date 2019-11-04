@@ -2,23 +2,97 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Flask Employee API</title>
+    <title>Flask Employee API <i class="fas fa-chevron-right"></i></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="../static/index.js"></script>
   </head>
   <body>
-    <h2 class="text-center">Employees API</h2>
-    <div class="w-100">
-      <p class="text-center">API for basic CRUD operations on employee data. HERE are the API endpoints. Or you can use the forms below to interact with the API</p>
+    <h2 class="text-center py-4 bg-info">Employees API</h2>
+    <div class="w-75 mx-auto">
+      <p class="text-center">API for basic CRUD operations on employee data. Use the endpoints or the forms below to interact with the API</p>
+      <div class="infoContainer mb-4">
+        <div class="text-center h4" onclick="toggleReqCont(this)">Endpoints <i class="fas fa-chevron-right"></i></div>
+        <div id="mainReqCont" style="display:none;">
+          <div class="">
+            <h4>GET requests</h4>
+            <div class="">
+              <div class="reqDiv">
+                <h6>/api/employee_names</h6>
+                <p>Returns all employee names</p>
+              </div>
+              <div class="reqDiv">
+                <h6>/api/employees_id</h6>
+                <p>Returns all employee IDs</p>
+              </div>
+              <div class="reqDiv">
+                <h6>/api/employee_records</h6>
+                <p>Returns all employee Records</p>
+              </div>
+              <div class="reqDiv">
+                <h6>/api/employee_records/employee_id</h6>
+                <p>Returns employee Record for given employee id</p>
+              </div>
+              <div class="reqDiv">
+                <h6>/api/employee_records/employee_name</h6>
+                <p>Returns employee Record for given employee name. Proper format is firstName_lastName</p>
+              </div>
+            </div>
+          </div>
 
-      <div class="btn-wrapper">
-        <button class="btn btn-info" type="button" name="button" onclick="allEmployeeData();">Get All Employee Data</button>
+          <div class="">
+            <h4>POST Requests</h4>
+            <div class="reqDiv">
+              <h6>/api/employee_records</h6>
+              <p>Request must have json formatted data. Required keys are first_name, last_name, address, salary, date_hired</p>
+              <p><span class="font-weight-bold d-block">Example using cURL:</span>curl -X POST -d '{"first_name":"John","last_name":"Doe","address":"66 Foyer Ave","salary":"98000","date_hired":"2/12/2014"}' -H "Content-Type: application/json" http://127.0.0.1:5000/api/employee_records
+</p>
+            </div>
+
+          </div>
+
+          <div class="">
+            <h4>DELETE Requests</h4>
+            <div class="reqDiv">
+              <h6>/api/employee_records/employee_id</h6>
+              <p>Deletes the employee record of given employee_id</p>
+            </div>
+            <div class="reqDiv">
+              <h6>/api/employee_records/employee_name</h6>
+              <p>Deletes the employee record of given employee_name. Name must be formatted as firstName_lastName</p>
+            </div>
+          </div>
+
+          <div class="">
+            <h4>PUT Requests</h4>
+            <div class="reqDiv">
+              <h6>/api/employee_records/employee_id</h6>
+              <p>Request must have json formatted data. Required keys are first_name, last_name, address, salary, date_hired. Only keys with values will be updated</p>
+              <p><span class="font-weight-bold d-block">Example using cURL:</span>curl -X PUT -d '{"first_name":"","last_name":"","address":"","salary":"98000","date_hired":""}' -H "Content-Type: application/json" http://127.0.0.1:5000/api/employee_records/1</p>
+              <span>Will update the salary to 98000 of record with employee_id of 1</span>
+            </div>
+            <div class="reqDiv">
+              <h6>/api/employee_records/employee_name</h6>
+              <p>Request must have json formatted data. Required keys are first_name, last_name, address, salary, date_hired. Only keys with values will be updated</p>
+              <p><span class="font-weight-bold d-block">Example using cURL:</span>curl -X PUT -d '{"first_name":"","last_name":"","address":"","salary":"98000","date_hired":""}' -H "Content-Type: application/json" http://127.0.0.1:5000/api/employee_records/1</p>
+              <span>Will update the salary to 98000 of record with employee_id of 1</span>
+            </div>
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="bg-light my-4">
-        <div class="h4 text-center py-3" onclick="expandForm(this)">Get Employee Data</div>
+      <div class="btn-wrapper">
+        <button class="btn btn-info mx-3 p-2" type="button" name="button" onclick="allEmployeeData();">Get All Employee Data</button>
+        <button class="btn btn-info mx-3 p-2" type="button" name="button" onclick="employeeSalaries();">Get Employee Salaries</button>
+        <button class="btn btn-info mx-3 p-2" type="button" name="button" onclick="employeeAddresses();">Get Employee Addresses</button>
+      </div>
+
+      <div class="infoContainer my-4">
+        <div class="h4 text-center py-3" onclick="expandForm(this)">Get Employee Data <i class="fas fa-chevron-right"></i></div>
         <form id="getForm" class="w-50 mx-auto form-div" style="display:none;">
           <p class="text-center">* Input employee ID <strong>OR</strong> employee name *</p>
           <div class="messageBox" style="display:none;">
@@ -38,8 +112,8 @@
         </form>
       </div>
 
-      <div class="bg-light my-4">
-        <div class="h4 text-center py-3" onclick="expandForm(this)">Update Employee Info</div>
+      <div class="infoContainer my-4">
+        <div class="h4 text-center py-3" onclick="expandForm(this)">Update Employee Info <i class="fas fa-chevron-right"></i></div>
         <form id="putForm" class="w-50 mx-auto form-div" style="display:none;">
           <p class="text-center">* <strong>Must input employee ID.</strong> All other inputs are optional. Only inputs with values will be updated *</p>
           <div class="messageBox" style="display:none;">
@@ -75,8 +149,8 @@
         </form>
       </div>
 
-      <div class="bg-light my-4">
-        <div class="h4 text-center py-3" onclick="expandForm(this)">Create New Employee Record</div>
+      <div class="infoContainer my-4">
+        <div class="h4 text-center py-3" onclick="expandForm(this)">Create New Employee Record <i class="fas fa-chevron-right"></i></div>
         <form id="postForm" class="w-50 mx-auto form-div" style="display:none;">
           <p class="text-center">*<strong>All input fields are required</strong>*</p>
           <div class="messageBox" style="display:none;">
@@ -108,8 +182,8 @@
         </form>
       </div>
 
-      <div class="bg-light my-4">
-        <div class="h4 text-center py-3" onclick="expandForm(this)">Delete Employee Data</div>
+      <div class="infoContainer my-4">
+        <div class="h4 text-center py-3" onclick="expandForm(this)">Delete Employee Data <i class="fas fa-chevron-right"></i></div>
         <form id="deleteForm" class="w-50 mx-auto form-div" style="display:none;">
           <p class="text-center">* Input employee ID <strong>OR</strong> employee name *</p>
           <div class="messageBox" style="display:none;">

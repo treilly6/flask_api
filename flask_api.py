@@ -178,7 +178,17 @@ class Employee_Record_Name(Resource):
 
         first_name = split_name[0]
         last_name = split_name[1]
-        query = Employee.query.filter(Employee.first_name == first_name, Employee.last_name == last_name).first()
+        record = Employee.query.filter(Employee.first_name == first_name, Employee.last_name == last_name).first()
+
+        if record == None:
+            print("ITS A NONE RECORD")
+            return jsonify({"error" : "Name did not match any record"})
+        else:
+            print("WE CHILLEN")
+            db.session.delete(record)
+            db.session.commit()
+            return jsonify({"success":"Successfully Deleted Record"})
+
 
 
 class Salaries(Resource):
@@ -186,6 +196,12 @@ class Salaries(Resource):
         query = Employee.query.with_entities(Employee.salary).all()
         response = [salary for salary, in query]
         return {"salaries" : response}
+
+class Addresses(Resource):
+    def get(self):
+        query = Employee.query.with_entities(Employee.address).all()
+        response = [address for address, in query]
+        return {"addresses" : response}
 
 
 @app.route('/')
@@ -202,3 +218,4 @@ api.add_resource(Employee_Record,'/api/employee_records')
 api.add_resource(Employee_Record_ID, '/api/employee_records/<int:id>')
 api.add_resource(Employee_Record_Name, '/api/employee_records/<string:name>')
 api.add_resource(Salaries, '/api/salaries')
+api.add_resource(Addresses, '/api/addresses')
